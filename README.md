@@ -56,23 +56,37 @@ CI runs `nix flake check` on pushes to `main` and on pull requests.
 
 ## Publishing
 
-Bump `version` in `package.json`, commit, then push a matching tag.
+Releases go through npm staged publishing. CI uploads the version, and nobody can install it until a maintainer approves
+it with 2FA.
+
+1. Bump `version` in `package.json`, commit, then push a matching tag.
+
+   ```sh
+   git tag v0.1.1
+   git push origin v0.1.1
+   ```
+
+2. The `Publish` workflow checks the tag against `package.json`, runs `nix flake check`, and stages the tarball from
+   `nix build` with provenance.
+3. Approve the staged version from `nix develop`.
+
+   ```sh
+   npm stage list @foliag/zag
+   npm stage approve <stage-id>
+   ```
+
+The workflow runs in the `npm` GitHub environment and reads `NPM_TOKEN` from it. That secret is a stage-only granular
+token with write access to the `@foliag` scope, so a leaked token cannot publish anything on its own. Once the package
+exists you can replace it with a GitHub Actions trusted publisher on npmjs.com (organization `foli-ag`, repository
+`zag`, workflow `publish.yml`, environment `npm`) and delete the secret. Trusted publishers can always stage.
+
+npm's manual lists an existing package as a prerequisite for `npm stage`. If staging the first version fails for that
+reason, publish it once by hand from `nix develop`.
 
 ```sh
-git tag v0.1.0
-git push origin v0.1.0
+nix build
+npm publish ./result/foliag-zag-0.1.0.tgz --access public
 ```
-
-The `Publish` workflow checks the tag against `package.json`, runs `nix flake check`, and publishes the tarball from
-`nix build` with provenance. It runs in the `npm` GitHub environment, where you can require an approval.
-
-npm only lets you add a trusted publisher to a package that already exists, so the first release needs a token.
-
-1. Create a granular access token on npmjs.com with write access to the `@foliag` scope. Save it as the `NPM_TOKEN`
-   secret of the `npm` environment, then push the first tag.
-2. On npmjs.com, open the package settings and add a GitHub Actions trusted publisher. Use organization `foli-ag`,
-   repository `zag`, workflow `publish.yml` and environment `npm`, and allow `npm publish`.
-3. Delete the `NPM_TOKEN` secret. Later releases authenticate through OIDC.
 
 ## License
 

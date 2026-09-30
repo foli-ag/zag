@@ -29,9 +29,9 @@ jobs:
       - run: nix flake check -L
       - run: nix build -L
 
-      # npm authenticates through the trusted publisher first. NPM_TOKEN is only needed for the
-      # first release, since npm configures trusted publishers on a package that already exists.
-      - name: Publish to npm
+      # The version stays private until a maintainer approves it with 2FA (`npm stage approve`).
+      # npm authenticates through the trusted publisher first, then NPM_TOKEN, a stage-only token.
+      - name: Stage on npm
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
@@ -40,4 +40,4 @@ jobs:
             # shellcheck disable=SC2016
             echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > ~/.npmrc
           fi
-          nix develop -c npm publish ./result/*.tgz --provenance --access public
+          nix develop -c npm stage publish ./result/*.tgz --provenance --access public
