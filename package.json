@@ -34,8 +34,8 @@
     "build": "tsup",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "format": "prettier --write .",
-    "prepublishOnly": "pnpm build"
+    "format": "biome format --write .",
+    "prepublishOnly": "bun run build"
   },
   "dependencies": {
     "@zag-js/core": "^1.44.0",
@@ -47,6 +47,7 @@
     "solid-js": "^2.0.0-rc.9"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.15",
     "@solidjs/testing-library": "1.0.0-beta.3",
     "@solidjs/vite-plugin": "3.0.0-next.44",
     "@solidjs/web": "2.0.0-rc.9",
@@ -55,11 +56,15 @@
     "@zag-js/accordion": "1.44.0",
     "@zag-js/checkbox": "1.44.0",
     "jsdom": "30.0.1",
-    "prettier": "3.9.6",
     "solid-js": "2.0.0-rc.9",
     "tsup": "8.5.1",
     "typescript": "6.0.3",
     "vite": "8.2.1",
     "vitest": "4.1.11"
+  },
+  "overrides": {
+    "@solidjs/signals": "2.0.0-rc.9",
+    "@solidjs/compiler": "2.0.0-rc.9",
+    "@solidjs/babel-plugin": "2.0.0-rc.9"
   }
 }

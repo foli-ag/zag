@@ -3,7 +3,7 @@
 [Zag.js](https://zagjs.com) adapter for Solid 2. It has the same API as `@zag-js/solid`, which only supports Solid 1.
 
 ```sh
-pnpm add @foliag/zag @zag-js/accordion
+bun add @foliag/zag @zag-js/accordion
 ```
 
 ```tsx
@@ -21,7 +21,7 @@ Peer range is `solid-js@^2.0.0-rc.9` with `@solidjs/web@^2.0.0-rc.9`. Developmen
 release the Solid 2 line of TanStack Start (`@tanstack/solid-start@2.0.0-rc`) is built and tested against.
 
 Solid's own packages depend on each other through caret ranges, so a fresh install of `solid-js@2.0.0-rc.9` pulls
-`@solidjs/signals` at the newest RC and crashes on startup. `pnpm-workspace.yaml` overrides `@solidjs/signals`,
+`@solidjs/signals` at the newest RC and crashes on startup. `package.json` overrides `@solidjs/signals`,
 `@solidjs/compiler` and `@solidjs/babel-plugin` to rc.9. An app that pins Solid to an RC needs the same overrides.
 
 ## Differences from `@zag-js/solid`
@@ -36,18 +36,22 @@ Solid's own packages depend on each other through caret ranges, so a fresh insta
 
 ## Development
 
-The flake provides Node and pnpm. Run `direnv allow` once, or enter the shell with `nix develop`.
+The flake provides Bun and Node. Bun installs and runs the scripts, while vite, vitest and tsup run on Node. Run
+`direnv allow` once, or enter the shell with `nix develop`.
 
 ```sh
-pnpm install
-pnpm test        # vitest, jsdom
-pnpm typecheck
-pnpm build       # dist/index.js and dist/index.d.ts, ESM only like solid-js 2
+bun install
+bun run test        # vitest, jsdom
+bun run typecheck
+bun run build       # dist/index.js and dist/index.d.ts, ESM only like solid-js 2
+bun run format      # biome, formats TypeScript and JSON but not Markdown or YAML
 ```
 
+Use `bun run test` and `bun run build`. Plain `bun test` and `bun build` are Bun's own test runner and bundler.
+
 `nix build` produces the npm tarball in `result/`. `nix flake check` runs the build, typecheck and tests in the sandbox.
-After changing `pnpm-lock.yaml`, set `hash` in `nix/package.nix` to `lib.fakeHash`, run `nix build` and paste the hash
-it reports.
+After changing `bun.lock`, set `outputHash` of `bunDeps` in `nix/package.nix` to `lib.fakeHash`, run `nix build` and
+paste the hash it reports.
 
 The flake follows the dendritic pattern. Every file under `nix/` is a flake-parts module that `import-tree` loads, so a
 new module only needs a new file.
@@ -57,7 +61,7 @@ CI runs `nix flake check` on pushes to `main` and on pull requests.
 ## Publishing
 
 Releases go through npm staged publishing. CI uploads the version, and nobody can install it until a maintainer approves
-it with 2FA.
+it with 2FA. Publishing stays on the npm CLI because `bun publish` can neither stage a version nor attach provenance.
 
 1. Bump `version` in `package.json`, commit, then push a matching tag.
 

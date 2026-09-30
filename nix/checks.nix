@@ -2,14 +2,14 @@
   perSystem =
     { self', ... }:
     let
-      # Runs a package.json script against the package's source and offline pnpm store
-      pnpmScript =
+      # Runs a package.json script against the package's source and installed dependencies
+      bunScript =
         script:
         self'.packages.default.overrideAttrs {
           name = "foliag-zag-${script}";
           buildPhase = ''
             runHook preBuild
-            pnpm ${script}
+            bun run ${script}
             runHook postBuild
           '';
           installPhase = "touch $out";
@@ -18,8 +18,8 @@
     {
       checks = {
         package = self'.packages.default;
-        typecheck = pnpmScript "typecheck";
-        test = pnpmScript "test";
+        typecheck = bunScript "typecheck";
+        test = bunScript "test";
       };
     };
 }

@@ -1,0 +1,3 @@
+[install]
+# Strict, symlinked node_modules like pnpm's, so an undeclared dependency fails to resolve
+linker = "isolated"
