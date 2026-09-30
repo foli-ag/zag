@@ -1,0 +1,65 @@
+{
+  "name": "@foliag/zag",
+  "version": "0.1.0",
+  "description": "Zag.js adapter for Solid 2",
+  "keywords": [
+    "ui-machines",
+    "state-machines",
+    "zag",
+    "solid",
+    "use-machine",
+    "hook"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foli-ag/zag.git"
+  },
+  "type": "module",
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@zag-js/core": "^1.44.0",
+    "@zag-js/types": "^1.44.0",
+    "@zag-js/utils": "^1.44.0"
+  },
+  "peerDependencies": {
+    "@solidjs/web": "^2.0.0-rc.9",
+    "solid-js": "^2.0.0-rc.9"
+  },
+  "devDependencies": {
+    "@solidjs/testing-library": "1.0.0-beta.3",
+    "@solidjs/vite-plugin": "3.0.0-next.44",
+    "@solidjs/web": "2.0.0-rc.9",
+    "@testing-library/jest-dom": "7.0.1",
+    "@types/node": "25.9.5",
+    "@zag-js/accordion": "1.44.0",
+    "@zag-js/checkbox": "1.44.0",
+    "jsdom": "30.0.1",
+    "prettier": "3.9.6",
+    "solid-js": "2.0.0-rc.9",
+    "tsup": "8.5.1",
+    "typescript": "6.0.3",
+    "vite": "8.2.1",
+    "vitest": "4.1.11"
+  }
+}
