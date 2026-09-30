@@ -47,13 +47,17 @@
 
           installPhase = ''
             runHook preInstall
+            # Whether bun links a dependency's binaries into a package's own .bin depends on the order the
+            # tarballs arrive in, which changes the hash from one machine to the next. Only dependency lifecycle
+            # scripts use those links, and --ignore-scripts skips them.
+            find node_modules/.bun -mindepth 3 -maxdepth 3 -name .bin -prune -exec rm -rf {} +
             mkdir $out
             cp -a node_modules $out
             runHook postInstall
           '';
 
           outputHashMode = "recursive";
-          outputHash = "sha256-i2bCUu2ajBYr4ZG/vueJ1TD6Ro1cxpRbZMfLiyp48Go=";
+          outputHash = "sha256-PbZ5bRvjc+8lzFTrzzmQB8GxmlCxQndFBTtmevDtKgo=";
         };
 
         # Node runs vite, vitest and tsup, which are written for it. Bun installs and runs the scripts.
