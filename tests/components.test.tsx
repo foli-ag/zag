@@ -132,6 +132,24 @@ describe("components", () => {
     expect(control).toHaveAttribute("data-state", "checked")
   })
 
+  test("keeps typed text when another prop of the input changes", () => {
+    const [invalid, setInvalid] = createSignal(false)
+    render(() => (
+      <input data-testid="input" {...normalizeProps.input({ defaultValue: "", "aria-invalid": invalid() })} />
+    ))
+
+    // the owner has not stored the typed text yet, so zag still reports the old value
+    const input = screen.getByTestId("input") as HTMLInputElement
+    input.value = "typed"
+    fireEvent.input(input)
+
+    setInvalid(true)
+    flush()
+
+    expect(input).toHaveAttribute("aria-invalid", "true")
+    expect(input.value).toBe("typed")
+  })
+
   test("stops the machine on unmount", async () => {
     const [show, setShow] = createSignal(true)
     render(() => (
