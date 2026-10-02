@@ -50,8 +50,9 @@ bun run format      # biome, formats TypeScript and JSON but not Markdown or YAM
 Use `bun run test` and `bun run build`. Plain `bun test` and `bun build` are Bun's own test runner and bundler.
 
 `nix build` produces the npm tarball in `result/`. `nix flake check` runs the build, typecheck and tests in the sandbox.
-After changing `bun.lock`, set `outputHash` of `bunDeps` in `nix/package.nix` to `lib.fakeHash`, run `nix build` and
-paste the hash it reports.
+The build fetches each package `bun.lock` pins with the hash the lockfile records for it, through
+[bun2nix](https://github.com/nix-community/bun2nix), so changing dependencies needs nothing beyond `bun install`. Two
+branches that both add a dependency conflict in `bun.lock` at most, and `bun install` resolves it.
 
 The flake follows the dendritic pattern. Every file under `nix/` is a flake-parts module that `import-tree` loads, so a
 new module only needs a new file.
