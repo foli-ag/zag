@@ -1,6 +1,6 @@
 {
   "name": "@foliag/zag",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zag.js adapter for Solid 2",
   "keywords": [
     "ui-machines",
