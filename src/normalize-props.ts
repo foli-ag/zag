@@ -1,4 +1,4 @@
-import type { JSX } from "@solidjs/web"
+import { isServer, type JSX } from "@solidjs/web"
 import { createNormalizer } from "@zag-js/types"
 import { isBoolean, isNumber, isObject, isString } from "@zag-js/utils"
 
@@ -12,10 +12,12 @@ const eventMap: Record<string, string> = {
   onBlur: "onFocusOut",
   onDoubleClick: "onDblClick",
   onChange: "onInput",
-  defaultChecked: "checked",
-  defaultValue: "value",
   htmlFor: "for",
   className: "class",
+  // zag passes a form control's value as defaultValue or defaultChecked, and writes the element itself when it changes.
+  // The browser keeps them: Solid 2 rewrites value and checked whenever any prop of the element changes, which would
+  // drop text typed before the owner stores it. The server only renders value and checked.
+  ...(isServer && { defaultChecked: "checked", defaultValue: "value" }),
 }
 
 // Solid 2 removes an attribute set to `false` and renders `true` as an empty string.

@@ -31,6 +31,9 @@ Solid's own packages depend on each other through caret ranges, so a fresh insta
 - Machine setup and watchers run untracked, which avoids Solid 2 strict-read warnings.
 - Boolean `aria-*`, `data-*`, `contentEditable`, `draggable` and `spellCheck` values become `"true"` and `"false"`.
   Solid 2 would otherwise drop the attribute when the value is `false`.
+- `defaultValue` and `defaultChecked` stay as they are in the browser and only become `value` and `checked` on the
+  server. Solid 2 rewrites `value` and `checked` whenever any prop of the element changes, which would drop text typed
+  into an input before its owner stores it. zag writes the element itself when the value changes.
 - `mergeProps` keeps class objects and arrays as they are instead of joining strings.
 - `Key` is built on `<For keyed>`, with the same props as `Key` from `@solid-primitives/keyed`.
 
