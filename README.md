@@ -1,3 +1,8 @@
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/banner-dark.webp">
+  <img alt="@foliag/zag" src=".github/banner-light.webp">
+</picture>
+
 # @foliag/zag
 
 [Zag.js](https://zagjs.com) adapter for Solid 2. It has the same API as `@zag-js/solid`, which only supports Solid 1.
